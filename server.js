@@ -5,6 +5,7 @@ import dbConnect from "./Config/db.js";
 import otpRouter from "./Routes/otp-route.js";
 import userRouter from "./Routes/user-routes.js";
 import addressRouter from "./Routes/address-route.js";
+import cors from "cors";
 
 //.env loading
 dotenv.config();
@@ -17,6 +18,7 @@ dbConnect(uri);
 
 // creating server
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 

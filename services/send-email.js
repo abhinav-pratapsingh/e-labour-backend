@@ -1,6 +1,7 @@
-import { config } from "dotenv";
-config();
+import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
     secure:true,
@@ -15,6 +16,8 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = async (to,subject,msg)=>{
     try{
+        console.log(process.env.PASS_EMAIL);
+        console.log(process.env.USER_EMAIL);
     await transporter.sendMail({
         to,
         subject,

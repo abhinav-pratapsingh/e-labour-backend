@@ -1,6 +1,5 @@
 import sendMail from "../services/send-email.js"
 import Otp from "../models/Otp.js";
-import sendOtpEmail from "./mailgun.js";
 
 
 const genOtp = ()=>{
@@ -16,7 +15,7 @@ const sendOtp = async (req,res)=>{
     try{
     await Otp.deleteMany({email});
     await Otp.create({email,otp});
-    const sent = await sendOtpEmail(email,"User",otp);
+    const sent = await sendMail(email,"User",otp);
     if(sent){
     res.status(200).json({success:true,messaage:"OTP sent successfully"});
     }

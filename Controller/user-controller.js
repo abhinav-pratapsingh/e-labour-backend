@@ -14,16 +14,16 @@ const register = async (req,res)=>{
         if(user){
             return res.status(409).json({success:false,message : "User Already Exists..."});
         }
-        if(await verifyOtp(email,newotp)){
+        // if(await verifyOtp(email,newotp)){
             const img = await fileUpload(image);
             const newUser = new User({email,name,phone,password,role,isTAndCAgree,avatar:{image:img.url,publicId:img.publicId}});
             const token = await tokenGen(newUser._id);
             await newUser.save();
             res.status(201).json({success:true,message:"user created successfully",token});
-        }
-        else{
-            res.status(400).json({success:false,message:"otp does not matched"});
-        }
+        // }
+        // else{
+        //     res.status(400).json({success:false,message:"otp does not matched"});
+        // }
     }
     catch(e){
         res.status(500).json({success:false,message:`error ${e}`});

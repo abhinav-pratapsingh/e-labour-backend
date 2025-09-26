@@ -1,5 +1,6 @@
 import sendMail from "../services/send-email.js"
 import Otp from "../models/Otp.js";
+import sendOtpEmail from "./mailgun.js";
 
 
 const genOtp = ()=>{
@@ -12,12 +13,10 @@ const sendOtp = async (req,res)=>{
     if(!email) return res.status(400).json({success:false,message:"please provide email"})
     const otp = genOtp().toString();
     console.log(otp);
-    const subject = "e-labour";
-    const messaage = `<h2>Your Otp for registering on e-labour is ${otp}</h2>`
     try{
     await Otp.deleteMany({email});
     await Otp.create({email,otp});
-    const sent = await sendMail(email,subject,messaage);
+    const sent = await sendOtpEmail(email,"User",otp);
     if(sent){
     res.status(200).json({success:true,messaage:"OTP sent successfully"});
     }

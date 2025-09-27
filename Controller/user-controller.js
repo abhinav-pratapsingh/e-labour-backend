@@ -4,7 +4,7 @@ import fileUpload from "../services/file-upload.js";
 import { tokenGen } from "../services/jwt-handling.js";
 import bcrypt from "bcrypt";
 import Address from "../models/Address.js";
-import Worker from "../models/worker.js";
+import Worker from "../models/Worker.js";
 
 const register = async (req,res)=>{
     const {email,phone,password,name,role,isTAndCAgree} = req.body;

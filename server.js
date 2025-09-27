@@ -7,6 +7,7 @@ import userRouter from "./Routes/user-routes.js";
 import addressRouter from "./Routes/address-route.js";
 import cors from "cors";
 import reviewsRouter from "./Routes/reviews-route.js";
+import workerRouter from "./Routes/worker-route.js";
 
 //.env loading
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/api/otp",otpRouter);
 app.use("/api/users",userRouter);
 app.use("/api/addresses",addressRouter);
 app.use("/api/reviews",reviewsRouter);
+app.use("/api/workers",workerRouter);
 
 //starting server
 app.listen(Port,()=>{

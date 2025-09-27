@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     phone: {
-        type: Number,
+        type: String,
         required: true
     },
     password: {
@@ -30,14 +30,7 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    avatar: { type:Object},
-    workerProfile: {
-        skills: [{ type: String }],
-        experience: { type: Number },
-        availability: { type: Boolean },
-        Rate: { type: Number },
-        bio: { type: String },           
-    }
+    avatar: { type:Object}
 }, { timestamps: true });
 
 userSchema.pre("save", async function (next) {

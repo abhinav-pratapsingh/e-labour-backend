@@ -12,6 +12,11 @@ const addressSchema = new mongoose.Schema({
             message:"invaild User id"
         }
     },
+    role: {
+        type: String,
+        enum: ["customer", "worker"],
+        default: "customer",
+    },
     name:String,
     phone:String,
     street:String,

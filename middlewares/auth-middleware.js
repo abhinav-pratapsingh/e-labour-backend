@@ -8,6 +8,7 @@ const authMiddleware = async(req,res,next)=>{
     }
     const data = await verifyToken(token);
     req._id = data.userid;
+    req.role = data.role;
     next();
 }catch(e){
     console.log(e);

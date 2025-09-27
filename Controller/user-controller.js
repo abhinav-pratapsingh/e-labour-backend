@@ -10,8 +10,8 @@ const register = async (req,res)=>{
 
     try{
         // const newotp = otp.toString();
-        const user = await User.findOne({email:email});
-        if(user.email==email && user.role==role ){
+        const user = await User.findOne({email:email,role});
+        if(user){
             return res.status(409).json({success:false,message : "User Already Exists..."});
         }
         // if(await verifyOtp(email,newotp)){

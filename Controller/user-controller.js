@@ -5,13 +5,13 @@ import { tokenGen } from "../services/jwt-handling.js";
 import bcrypt from "bcrypt";
 
 const register = async (req,res)=>{
-    const {email,phone,otp,password,name,role,isTAndCAgree} = req.body;
+    const {email,phone,password,name,role,isTAndCAgree} = req.body;
     const image = req.file;
 
     try{
-        const newotp = otp.toString();
+        // const newotp = otp.toString();
         const user = await User.findOne({email:email});
-        if(user){
+        if(user.email==email && user.role==role ){
             return res.status(409).json({success:false,message : "User Already Exists..."});
         }
         // if(await verifyOtp(email,newotp)){
@@ -33,7 +33,7 @@ const register = async (req,res)=>{
 const login = async (req,res)=>{
     const {email,password,role} = req.body;
     try{
-    const user = await User.findOne({email:email});
+    const user = await User.findOne({email:email,role});
     if(!user){
         return res.status(404).json({success:false,message:"Invaild credentials"});
     }

@@ -6,6 +6,7 @@ import otpRouter from "./Routes/otp-route.js";
 import userRouter from "./Routes/user-routes.js";
 import addressRouter from "./Routes/address-route.js";
 import cors from "cors";
+import reviewsRouter from "./Routes/reviews-route.js";
 
 //.env loading
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({extended:true}));
 app.use("/api/otp",otpRouter);
 app.use("/api/users",userRouter);
 app.use("/api/addresses",addressRouter);
+app.use("/api/reviews",reviewsRouter);
 
 //starting server
 app.listen(Port,()=>{

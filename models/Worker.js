@@ -15,7 +15,7 @@ const workerSchema = new mongoose.Schema({
     skills: [{ type: String }],
     experience: { type: String },
     emergencyInfo: { contact: String, name: String },
-    rate: { type: Number },
+    rate: { type: String },
     bio: { type: String },
     address : {
         type : mongoose.Schema.Types.ObjectId,

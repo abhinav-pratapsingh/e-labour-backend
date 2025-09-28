@@ -28,7 +28,7 @@ const addressSchema = new mongoose.Schema({
         uppercase:true,
         required:true
     },
-    zipCode:Number 
+    zipCode:String
 
 });
 

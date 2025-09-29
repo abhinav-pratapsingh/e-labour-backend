@@ -1,5 +1,5 @@
 import Address from "../models/Address.js";
-import Worker from "../models/worker.js";
+import Worker from "../models/Worker.js";
 
 
 const workerAddInfo = async (req,res)=>{
@@ -30,13 +30,28 @@ const workerAddInfo = async (req,res)=>{
 
             rate,bio,address:address._id});
 
-        res.status(201).json({success:true,message:"details saved successfully",worker})
+        if(!worker) return res.status(404).res.json({success:false, message:"worker details not found "});
+
+        res.status(201).json({success:true,message:"details saved successfully",worker});
 
     } catch (error) {
         console.log(error.message);
          res.status(500).json({success:false,message:`error ${error.message}`});
     }
+};
+
+const getWorkerInfo = async (req,res)=>{
+    const workerId = req._id;
+    const role = req.role;
+    if(role!="worker") return res.status(400).json({success:false,message:"you are not a worker"});
+    try {
+        const worker = await Worker.findOne({workerId}).populate("workerId","name email phone avatar.image").populate("address");
+        res.status(200).json({success:true,message:"profile fetched successfully",worker});
+    } catch (error) {
+         console.log(error.message);
+         res.status(500).json({success:false,message:`error ${error.message}`});
+    }
 }
 
 
-export {workerAddInfo};
+export {workerAddInfo,getWorkerInfo};

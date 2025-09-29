@@ -13,4 +13,9 @@ const fileUpload = async (file,folder="uploads")=>{
     }
 }
 
-export default fileUpload;
+const deleteFile = async (publicId)=>{
+    const result = await cloudinay.uploader.destroy(publicId);
+
+}
+
+export {fileUpload};

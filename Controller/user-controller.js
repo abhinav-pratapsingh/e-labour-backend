@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import verifyOtp from "../services/verify-otp.js";
-import fileUpload from "../services/file-upload.js";
+import {fileUpload} from "../services/file-upload.js";
 import { tokenGen } from "../services/jwt-handling.js";
 import bcrypt from "bcrypt";
 import Address from "../models/Address.js";

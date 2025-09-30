@@ -11,6 +11,11 @@ const reviewSchema = mongoose.Schema({
         ref: "User",
         required: true
     },
+    bookingId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+        required: true
+    },
     review: String,
 
     rating: {

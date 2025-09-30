@@ -37,7 +37,7 @@ const getAddress = async (req, res) => {
         const role = req.role;
         const addresses = await Address.find({ user: _id ,role});
         res.status(200).json({ success: true, message: "Address fecth successfull", addresses });
-    } catch (error) {
+    } catch (error){
         console.log(error);
         res.status(500).json({ success: false, message: `error - ${error}` });
     }

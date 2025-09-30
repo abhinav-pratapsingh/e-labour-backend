@@ -8,6 +8,8 @@ import addressRouter from "./Routes/address-route.js";
 import cors from "cors";
 import reviewsRouter from "./Routes/reviews-route.js";
 import workerRouter from "./Routes/worker-route.js";
+import bookingRouter from "./Routes/booking-routes.js";
+
 
 //.env loading
 dotenv.config();
@@ -31,7 +33,7 @@ app.use("/api/users",userRouter);
 app.use("/api/addresses",addressRouter);
 app.use("/api/reviews",reviewsRouter);
 app.use("/api/workers",workerRouter);
-
+app.use("/api/booking",bookingRouter);
 //starting server
 app.listen(Port,()=>{
     console.log(`Listening on PORT no. ${Port}`);

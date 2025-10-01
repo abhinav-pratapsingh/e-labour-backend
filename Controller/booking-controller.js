@@ -6,6 +6,8 @@ const addBooking = async (req, res) => {
     const customerId = req._id;
     const bookingCode = `BKG-${Date.now()}-${Math.floor(Math.random() * 90000 + 10000)}`;
     const status = method==="online"?"completed":"pending";
+    const scheduled = new Date(scheduledDate);
+    scheduled.setUTCHours(0,0,0,0);
     try {
         const workerExists = await User.findById(workerId);
         if (!workerExists || workerExists.role !== "worker") {
@@ -14,7 +16,7 @@ const addBooking = async (req, res) => {
 
         const existingBooking = await Booking.findOne({
             workerId,
-            scheduledDate: scheduledDate,
+            scheduledDate: scheduled,
             status: { $in: ["pending", "approved"] }
         });
 
@@ -32,7 +34,7 @@ const addBooking = async (req, res) => {
                 amount,
                 status
             },
-            workDetails, serviceType, scheduledDate,
+            workDetails, serviceType, scheduledDate:scheduled,
             location: {
                 street,
                 city,

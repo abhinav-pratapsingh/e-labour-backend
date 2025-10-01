@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const reviewSchema = mongoose.Schema({
-    Worker: {
+    worker: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -14,7 +14,8 @@ const reviewSchema = mongoose.Schema({
     bookingId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Booking",
-        required: true
+        required: true,
+        unique:true
     },
     review: String,
 

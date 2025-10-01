@@ -81,6 +81,6 @@ const getCusProfile = async (req,res)=>{
         console.log(error.message);
          res.status(500).json({success:false,message:`error ${error.message}`});
     }
-}
+};
 
 export {register,login,getCusProfile};

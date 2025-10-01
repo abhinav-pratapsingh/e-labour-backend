@@ -4,7 +4,8 @@ const workerSchema = new mongoose.Schema({
     workerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true,
+        unique:true
     },
     fName: { type: String, required: true },
     dob: { type: String, required: true },

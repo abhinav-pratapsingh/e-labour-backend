@@ -1,5 +1,6 @@
 import Address from "../models/Address.js";
 import Worker from "../models/Worker.js";
+import Reviews from "../models/Reviews.js";
 
 
 const workerAddInfo = async (req,res)=>{
@@ -61,7 +62,7 @@ const updateWorkerInfo = async (req,res)=>{
     //continue later
 }
 
-const listWorker = async(req,res)=>{
+const listWorkers = async(req,res)=>{
     const {workCategory} = req.query;
     try {
         const workers = await Worker.find({workCategory}).populate("address").populate("workerId","name avatar.image");
@@ -74,5 +75,19 @@ const listWorker = async(req,res)=>{
 
 }
 
+const fetchworkerProfile = async(req,res)=>{
+    const {workerId} = req.params;
+    try {
+        const worker = await Worker.findOne({workerId}).populate("workerId","name email avatar").populate("address");
+        if(!worker){
+            return res.status(404).json({success:false,message:"worker doesn't exists"});
+        }
+        const reviews = await Reviews.find({ worker : workerId });
+        res.status(200).json({success:true,message:"profile fetched successfully",data:{worker,reviews}});
+    } catch (error) {
+        console.log(error.message);
+         res.status(500).json({success:false,message:`error ${error.message}`});
+    }
+}
 
-export {workerAddInfo,getWorkerInfo,listWorker};
+export {workerAddInfo,getWorkerInfo,listWorkers,fetchworkerProfile};

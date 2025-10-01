@@ -1,18 +1,16 @@
 import Reviews from "../models/Reviews.js";
 
 const addReview = async (req,res)=>{
-    const {rating,review} = req.body;
+    const {rating,review,bookingId} = req.body;
     const {workerId} = req.params
     const userId = req._id;
     try {
-        const user = Reviews.findone({reviewer:userId,worker:workerId});
+        const user = Reviews.findone({reviewer:userId,worker:workerId,bookingId});
         if(user){
             return res.status(403).json({success:false,message:"Review is already present for this worker"});
         }
-        else{
-            const newReview = await Reviews.create({rating,reviewer:reviewerId,worker:workerId,review});
+            const newReview = await Reviews.create({rating,reviewer:reviewerId,worker:workerId,review,bookingId});
             res.status(201).json({success:true,message:"review created successfully"});
-        }
     } catch (error) {
         res.status(500).json({success:false,message:`error ${e}`});
     }

@@ -15,7 +15,7 @@ const bookingSchema = new mongoose.Schema({
     method: { type: String, enum: ["offline", "online"], default: "offline", required: true },
     status: { type: String, enum: ["completed", "pending"],
      required: true },
-    amount: { type: Number, min: 0 }
+    amount: { type: String }
   },
   serviceType: { type: String, trim: true },
 

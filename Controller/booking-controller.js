@@ -10,11 +10,11 @@ const addBooking = async (req, res) => {
     const bookingCode = `BKG-${Date.now()}-${Math.floor(Math.random() * 90000 + 10000)}`;
     const status = method === "online" ? "completed" : "pending";
     const scheduled = new Date(scheduledDate);
-    scheduled.setHours(0, 0, 0, 0);
+    scheduled.setUTCHours(0, 0, 0, 0);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(0, 0, 0, 0);
     const maxDate = new Date(today);
-    maxDate.setDate(today.getDate() + 2);
+    maxDate.setUTCDate(today.getDate() + 2);
     try {
         const workerExists = await User.findById(workerId);
         if (!workerExists || workerExists.role !== "worker") {

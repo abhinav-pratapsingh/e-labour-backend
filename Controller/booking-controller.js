@@ -5,6 +5,8 @@ import User from "../models/User.js";
 const addBooking = async (req, res) => {
     const { workerId, amount, method,serviceType, scheduledDate,addressId } = req.body;
     const customerId = req._id;
+    scheduledDate.toString();
+    console.log(scheduledDate);
     const bookingCode = `BKG-${Date.now()}-${Math.floor(Math.random() * 90000 + 10000)}`;
     const status = method === "online" ? "completed" : "pending";
     const scheduled = new Date(scheduledDate);

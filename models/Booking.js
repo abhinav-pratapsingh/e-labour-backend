@@ -17,12 +17,10 @@ const bookingSchema = new mongoose.Schema({
      required: true },
     amount: { type: Number, min: 0 }
   },
-  
-  workDetails: { type: String, trim: true },
   serviceType: { type: String, trim: true },
 
   bookingDate: { type: Date, default: Date.now },
-  scheduledDate: { type: Date },
+  scheduledDate: { type: Date},
 
   location: {
     street:{type:String,

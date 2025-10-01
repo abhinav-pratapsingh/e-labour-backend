@@ -1,13 +1,18 @@
+import Address from "../models/Address.js";
 import Booking from "../models/Booking.js";
 import User from "../models/User.js";
 
 const addBooking = async (req, res) => {
-    const { workerId, amount, method, workDetails, serviceType, scheduledDate, street, city, state, zipCode } = req.body;
+    const { workerId, amount, method,serviceType, scheduledDate,addressId } = req.body;
     const customerId = req._id;
     const bookingCode = `BKG-${Date.now()}-${Math.floor(Math.random() * 90000 + 10000)}`;
-    const status = method==="online"?"completed":"pending";
+    const status = method === "online" ? "completed" : "pending";
     const scheduled = new Date(scheduledDate);
-    scheduled.setUTCHours(0,0,0,0);
+    scheduled.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 2);
     try {
         const workerExists = await User.findById(workerId);
         if (!workerExists || workerExists.role !== "worker") {
@@ -21,12 +26,21 @@ const addBooking = async (req, res) => {
         });
 
         if (existingBooking) {
-            return res.status(409).json({ 
-                success: false, 
-                message: "Worker is already booked on this date" 
+            return res.status(409).json({
+                success: false,
+                message: "Worker is already booked on this date"
             });
         }
 
+        if (scheduled < today || scheduled > maxDate) {
+            return res.status(400).json({
+                success: false,
+                message: "You can only book a worker for today, tomorrow, or the day after tomorrow."
+            });
+        }
+        const address = await Address.findById(addressId);
+        console.log(address);
+        if(!address||address.user!=customerId) return res.status(404).json({success:false,message:"address not found"});
         const newBooking = await Booking.create({
             workerId, customerId,
             payment: {
@@ -34,43 +48,43 @@ const addBooking = async (req, res) => {
                 amount,
                 status
             },
-            workDetails, serviceType, scheduledDate:scheduled,
+            serviceType, scheduledDate: scheduled,
             location: {
-                street,
-                city,
-                state,
-                zipCode
+                street:address.street,
+                city:address.city,
+                state:address.state,
+                zipCode:address.zipCode
             },
             bookingCode
         });
 
         res.status(201).json({ success: true, message: "booking created successfully", booking: newBooking });
     } catch (error) {
-        console.error("Booking creation error:", error);
-        res.status(500).json({success: false,message: "Failed to create booking",error: error.message,});
+        console.log("Booking creation error:", error);
+        res.status(500).json({ success: false, message: "Failed to create booking", error: error.message, });
     }
 };
 
-const cancelBooking = async (rerq,res)=>{
-    const {cancelReason} = req.body;
-    const userId  = req._id;
+const cancelBooking = async (rerq, res) => {
+    const { cancelReason } = req.body;
+    const userId = req._id;
     const role = req.role;
-    const {bookingId} = req.params;
+    const { bookingId } = req.params;
     try {
         const booking = await Booking.findById(bookingId);
-        if(!booking) return res.status(404).json({ success: false, message: "Booking not found" });
-        if((role === "customer" && booking.customerId.toString() != userId.toString() )|| (role==="worker" && booking.workerId.toString() != userId.toString() )){
+        if (!booking) return res.status(404).json({ success: false, message: "Booking not found" });
+        if ((role === "customer" && booking.customerId.toString() != userId.toString()) || (role === "worker" && booking.workerId.toString() != userId.toString())) {
             return res.status(403).json({ success: false, message: "you are not authorized to perform this action" });
         }
         booking.status = "cancelled";
         booking.cancelReason = cancelReason;
         booking.cancelledBy = role;
         await booking.save();
-        res.status(200).json({success:true,message:"booking successfully cancelled",booking});
+        res.status(200).json({ success: true, message: "booking successfully cancelled", booking });
     } catch (error) {
         console.error("Booking creation error:", error);
-        res.status(500).json({success: false,message: "Failed to cancel booking",error: error.message,});
+        res.status(500).json({ success: false, message: "Failed to cancel booking", error: error.message, });
     }
 }
 
-export {addBooking,cancelBooking};
+export { addBooking, cancelBooking };

@@ -98,7 +98,6 @@ const fetchworkerProfile = async (req, res) => {
             }
         ]);
 
-        const scheduledDate = await Booking.find({workerId:workerId,status:{$in : ["pending","approved"]}},"scheduledDate");
         let averageRating = 0;
         let totalReviews = 0;
         if (stats.length) {
@@ -106,10 +105,39 @@ const fetchworkerProfile = async (req, res) => {
             totalReviews = stats[0].totalReviews;
         }
 
-        res.status(200).json({ success: true, message: "profile fetched successfully", data: { worker, reviews,averageRating,totalReviews,scheduledDate } });
+        const ratingCounts = await Reviews.aggregate([
+            { $match: { worker: new mongoose.Types.ObjectId(workerId) } },
+            {
+                $group: {
+                    _id: "$rating",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { _id: -1 }
+            }
+        ]);
+
+        const ratingCount = [5, 4, 3, 2, 1].map((star => {
+            const found = ratingCounts.find((r) => r._id === star);
+            const count = found ? found.count : 0;
+            return { rating: star, count }
+        }));
+
+        const ratingObj = ratingCount.reduce((acc, item) => {
+            acc[item.rating] = item.count;
+            return acc;                    
+        }, {});
+
+        const scheduledDate = await Booking.find({ workerId: workerId, status: { $in: ["pending", "approved"] } }, "scheduledDate").sort({ scheduledDate: 1 });
+        const dates = scheduledDate.map((obj) => {
+            return obj.scheduledDate;
+        })
+
+        res.status(200).json({ success: true, message: "profile fetched successfully", data: { worker, reviews, averageRating, totalReviews, ratingCount:ratingObj, scheduledDate: dates, } });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ success: false, message: `error ${error.message}` });
+        res.status(500).json({ success: false, message: `error ${error.message}`});
     }
 }
 

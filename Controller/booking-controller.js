@@ -89,4 +89,26 @@ const cancelBooking = async (rerq, res) => {
     }
 }
 
-export { addBooking, cancelBooking };
+const showUpcomingBookings = async(req,res)=>{
+    const userId = req._id;
+    const role = req.role;
+    try {
+        let query = {status:{$in:["pending","approved"]}};
+        if(role=="customer"){
+            query.customerId = userId;
+        }else if(role == "worker"){
+            query.workerId = userId;
+        }
+        else{
+            return res.status(400).json({success:false,message:"you are not authorized"})
+        }
+        const bookings = await Booking.find(query).populate("workerId","name email phone avatar").populate("customerId","name email phone avatar").sort({scheduledDate:1});
+        res.status(200).json({success:true,message:"bookigs fetched succesfully",bookings});
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({success:false,message:`error ${error.message}`});
+    }
+}
+
+export { addBooking, cancelBooking,showUpcomingBookings};

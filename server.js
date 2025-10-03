@@ -33,7 +33,7 @@ app.use("/api/users",userRouter);
 app.use("/api/addresses",addressRouter);
 app.use("/api/reviews",reviewsRouter);
 app.use("/api/workers",workerRouter);
-app.use("/api/booking",bookingRouter);
+app.use("/api/bookings",bookingRouter);
 //starting server
 app.listen(Port,()=>{
     console.log(`Listening on PORT no. ${Port}`);

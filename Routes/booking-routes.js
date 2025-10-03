@@ -6,7 +6,7 @@ const bookingRouter = express.Router();
 
 bookingRouter.get("/",authMiddleware,showUpcomingBookings);
 bookingRouter.post("/new",authMiddleware,addBooking);
-bookingRouter.post("/:bookingId/cancel",cancelBooking);
+bookingRouter.patch("/:bookingId/cancel",cancelBooking);
 
 
 export default bookingRouter;

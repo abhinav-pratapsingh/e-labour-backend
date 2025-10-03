@@ -67,13 +67,13 @@ const addBooking = async (req, res) => {
     }
 };
 
-const cancelBooking = async (rerq, res) => {
+const cancelBooking = async (req, res) => {
     const { cancelReason } = req.body;
     const userId = req._id;
     const role = req.role;
     const { bookingId } = req.params;
     try {
-        const booking = await Booking.findById(bookingId);
+        const booking = await Booking.findOne({_id:bookingId,status:{$in:["pending","approved"]}});
         if (!booking) return res.status(404).json({ success: false, message: "Booking not found" });
         if ((role === "customer" && booking.customerId.toString() != userId.toString()) || (role === "worker" && booking.workerId.toString() != userId.toString())) {
             return res.status(403).json({ success: false, message: "you are not authorized to perform this action" });
@@ -92,8 +92,15 @@ const cancelBooking = async (rerq, res) => {
 const showUpcomingBookings = async(req,res)=>{
     const userId = req._id;
     const role = req.role;
+    const {q} = req.query;
     try {
-        let query = {status:{$in:["pending","approved"]}};
+        let query = {};
+        if(q){
+            query.status=q
+        }
+        if(q==="upcoming"){
+            query.status={$in:["pending","approved"]}
+        }
         if(role=="customer"){
             query.customerId = userId;
         }else if(role == "worker"){

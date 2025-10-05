@@ -119,7 +119,8 @@ const showUpcomingBookings = async(req,res)=>{
 }
 
 const updateBookingStatus = async (req,res)=>{
-    const {bookingId,status} = req.params;
+    const {bookingId} = req.params;
+    const {q} = req.query;
     const role = req.role;
     try {
         const booking = await Booking.findOne({_id:bookingId,status:{$in:["pending", "approved"]}});
@@ -127,19 +128,19 @@ const updateBookingStatus = async (req,res)=>{
             return res.status(404).json({success:false,message:"booking not found"});
         }
         if((role=="worker"&& booking.status=="pending")){
-            if(status=="cancelled"){
+            if(q=="cancelled"){
                 booking.status = "cancelled";
             }else{
                 return res.status(400).json({success:false,message:"status is not correct"});
             }
-            if(status=="approved"){
+            if(q=="approved"){
                 booking.status = "approved";
             }else{
                 return res.status(400).json({success:false,message:"status is not correct"});
             }
         }
         else if(role=="customer"&&booking.status=="approved"){
-            if(status=="completed"){
+            if(q=="completed"){
             booking.status = "completed";
             }else{
                 return res.status(400).json({success:false,message:"status is not correct"});

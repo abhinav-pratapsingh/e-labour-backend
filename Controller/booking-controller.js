@@ -120,15 +120,40 @@ const showUpcomingBookings = async(req,res)=>{
 
 const updateBookingStatus = async (req,res)=>{
     const {bookingId,status} = req.params;
-    const userId = req._id; 
     const role = req.role;
     try {
         const booking = await Booking.findOne({_id:bookingId,status:{$in:["pending", "approved"]}});
-        
+        if(!booking){
+            return res.status(404).json({success:false,message:"booking not found"});
+        }
+        if((role=="worker"&& booking.status=="pending")){
+            if(status=="cancelled"){
+                booking.status = "cancelled";
+            }else{
+                return res.status(400).json({success:false,message:"status is not correct"});
+            }
+            if(status=="approved"){
+                booking.status = "approved";
+            }else{
+                return res.status(400).json({success:false,message:"status is not correct"});
+            }
+        }
+        else if(role=="customer"&&booking.status=="approved"){
+            if(status=="completed"){
+            booking.status = "completed";
+            }else{
+                return res.status(400).json({success:false,message:"status is not correct"});
+            }
+        }else{
+            return res.status(403).json({success:false,message:"you are not authorized to perform this action"});
+        }
+        await booking.save();
+        res.status(200).json({success:true,message:"status updated succesfully"},booking);
 
-    } catch (error) {
-        
+    } catch (error){
+        console.log(error.message);
+        res.status(500).json({success:false,message:`error ${error.message}`});
     }
 }
 
-export { addBooking, cancelBooking,showUpcomingBookings};
+export { addBooking, cancelBooking,showUpcomingBookings,updateBookingStatus};

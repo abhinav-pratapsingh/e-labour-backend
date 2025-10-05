@@ -132,10 +132,7 @@ const updateBookingStatus = async (req,res)=>{
                 booking.status = "cancelled";
                 booking.cancelledBy = "worker";
                 booking.cancelReason = "cancelled by worker due to unavailibility"
-            }else{
-                return res.status(400).json({success:false,message:"status is not correct"});
-            }
-            if(q=="approved"){
+            }else if(q=="approved"){
                 booking.status = "approved";
             }else{
                 return res.status(400).json({success:false,message:"status is not correct"});

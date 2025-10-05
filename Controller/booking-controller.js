@@ -119,22 +119,13 @@ const showUpcomingBookings = async(req,res)=>{
 }
 
 const updateBookingStatus = async (req,res)=>{
-    const {bookingId} = req.params;
-    const {status} = req.query;
+    const {bookingId,status} = req.params;
     const userId = req._id; 
     const role = req.role;
     try {
-        let query = {};
-        if(role==="customer"){
-            query.customerId = userId;
-        }
-        else if(role==="worker"){
-            query.workerId = userId;
-        }
-        else{
-            return res.status(403).json({ success: false, message: "you are not authorized to perform this action" });
-        }
-        const booking = await findById(bookingId)
+        const booking = await Booking.findOne({_id:bookingId,status:{$in:["pending", "approved"]}});
+        
+
     } catch (error) {
         
     }

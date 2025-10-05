@@ -3,6 +3,7 @@ import Worker from "../models/Worker.js";
 import Reviews from "../models/Reviews.js";
 import mongoose from "mongoose";
 import Booking from "../models/Booking.js";
+import User from "../models/User.js";
 
 
 const workerAddInfo = async (req, res) => {
@@ -141,4 +142,17 @@ const fetchworkerProfile = async (req, res) => {
     }
 }
 
-export { workerAddInfo, getWorkerInfo, listWorkers, fetchworkerProfile };
+const workerInfoPrimary = async(req,res)=>{
+    const workerId = req._id;
+    const role = req.role;
+    try {
+        const worker = await User.findOne({_id:workerId,role:role},{name:1,"avatar.image":1,email:1,phone:1,_id:0});
+        if(!worker) return res.status(404).json({success:false,message:"wooker not found"});
+        res.status(200).json({success:true,message:"worker fetched successfully",worker});
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ success: false, message: `error ${error.message}`});
+    }
+}
+
+export { workerAddInfo, getWorkerInfo, listWorkers, fetchworkerProfile, workerInfoPrimary };

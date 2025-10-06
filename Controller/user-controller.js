@@ -84,16 +84,4 @@ const getCusProfile = async (req,res)=>{
     }
 };
 
-const showUpcomingBookings = async(req,res)=>{
-    const userId = req._id;
-    try {
-        const bookings = await Booking.find({customerId:userId,status:{$in:["pending","approved"]}}).populate("workerId","name email phone avatar");
-        res.status(200).json({success:true,message:"bookigs fetched succesfully",bookings});
-
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({success:false,message:`error ${error.message}`});
-    }
-}
-
 export {register,login,getCusProfile};

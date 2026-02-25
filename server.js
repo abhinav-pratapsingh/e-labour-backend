@@ -54,6 +54,7 @@ app.use("/api/reviews", reviewsRouter);
 app.use("/api/workers", workerRouter);
 app.use("/api/bookings", bookingRouter);
 app.get("/health", (req,res)=>{
+  console.log("server awaked");
   res.send("OK");
 });
 

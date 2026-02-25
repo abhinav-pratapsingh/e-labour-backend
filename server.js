@@ -53,6 +53,9 @@ app.use("/api/addresses", addressRouter);
 app.use("/api/reviews", reviewsRouter);
 app.use("/api/workers", workerRouter);
 app.use("/api/bookings", bookingRouter);
+app.get("/health", (req,res)=>{
+  res.send("OK");
+});
 
 // Starting server
 app.listen(Port, () => {

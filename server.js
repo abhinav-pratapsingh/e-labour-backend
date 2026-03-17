@@ -24,6 +24,7 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   "https://e-majdur.netlify.app",
+  "https://helperloc.netlify.app",
   "http://localhost:5173"         
 ];
 

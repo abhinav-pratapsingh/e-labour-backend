@@ -30,7 +30,10 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    avatar: { type:Object}
+    avatar: {
+        url:String,
+        pubicId:String
+    }
 }, { timestamps: true });
 
 userSchema.pre("save", async function (next) {

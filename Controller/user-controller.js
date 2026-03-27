@@ -5,6 +5,7 @@ import { tokenGen } from "../services/jwt-handling.js";
 import bcrypt from "bcrypt";
 import Address from "../models/Address.js";
 import Booking from "../models/Booking.js";
+import Worker from "../models/Worker.js"
 
 const register = async (req,res)=>{
     const {email,phone,password,name,role,isTAndCAgree} = req.body;
@@ -47,6 +48,11 @@ const login = async (req,res)=>{
     console.log(isPassVaild)
     if(isPassVaild){
         const token = await tokenGen(user._id,role);
+        if (role == "worker") {
+                const workerProfile = await Worker.findOne({ workerId: user._id });
+                const isProfileComplete = !!workerProfile;
+                return res.status(200).json({ success: true, message: "Login successful", token, isProfileComplete });
+            }
         return res.status(200).json({success:true,message:"login successfull",token});
     }
     else{

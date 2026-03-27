@@ -7,7 +7,7 @@ import User from "../models/User.js";
 
 
 const workerAddInfo = async (req, res) => {
-    const { fName, dob, gender, workCategory, workingHr, weekends, skills, experience, reference, emergencyContact, hrRate,rate, bio, street, city, state, zipCode } = req.body;
+    const { fName, dob, gender, workCategory, experience, reference, emergencyContact, bio, street, city, state, zipCode } = req.body;
     const workerId = req._id;
     const role = req.role;
     if (role == "customer") {
@@ -27,13 +27,12 @@ const workerAddInfo = async (req, res) => {
         await address.save();
 
         const worker = await Worker.create({
-            workerId, fName, dob, gender, workCategory, workingHr, weekends, skills, experience,
+            workerId, fName, dob, gender, workCategory, experience,
             emergencyInfo: {
                 contact: emergencyContact,
                 name: reference
             },
-
-            rate,hrRate,bio, address: address._id
+            bio, address: address._id
         });
 
         if (!worker) return res.status(404).res.json({ success: false, message: "worker details not found " });

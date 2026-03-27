@@ -11,13 +11,8 @@ const workerSchema = new mongoose.Schema({
     dob: { type: String, required: true },
     gender: { type: String, enum: ["male", "female"], required: true },
     workCategory: { type: String, required: true },
-    workingHr: { type: String, required: true },
-    weekends: { type: Boolean, default: false },
-    skills: [{ type: String }],
     experience: { type: String },
     emergencyInfo: { contact: String, name: String },
-    rate: { type: String },
-    hrRate: { type: String },
     bio: { type: String },
     address : {
         type : mongoose.Schema.Types.ObjectId,

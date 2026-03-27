@@ -24,7 +24,7 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   "https://helperloc.com",
-  "http://helperloc.com"        
+  "http://www.helperloc.com"        
 ];
 
 // CORS middleware

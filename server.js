@@ -24,7 +24,8 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   "https://helperloc.com",
-  "http://www.helperloc.com"        
+  "http://www.helperloc.com",
+  "http://localhost:5173"
 ];
 
 // CORS middleware
@@ -53,7 +54,7 @@ app.use("/api/addresses", addressRouter);
 app.use("/api/reviews", reviewsRouter);
 app.use("/api/workers", workerRouter);
 app.use("/api/bookings", bookingRouter);
-app.get("/health", (req,res)=>{
+app.get("/health", (req, res) => {
   console.log("server awaked");
   res.send("OK");
 });
